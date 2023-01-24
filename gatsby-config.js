@@ -2,7 +2,7 @@ const blogConfig = require("./blog-config")
 const { title, description, author, siteUrl } = blogConfig
 
 module.exports = {
-  pathPrefix: "/gatsby-starter-hoodie",
+  pathPrefix: "/dev0wner-blog",
   siteMetadata: {
     title,
     description,
@@ -10,6 +10,7 @@ module.exports = {
     siteUrl,
   },
   plugins: [
+    `gatsby-plugin-cname`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-robots-txt`,
     {

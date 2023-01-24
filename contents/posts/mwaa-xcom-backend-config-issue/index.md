@@ -1,7 +1,12 @@
 ---
-date: '2022-11-25' title: 'aws-mwaa-configuration-xcom-backend-issue'
-categories: ['AWS', 'MWAA', 'Airflow', 'airflow.cfg', 'xcom', 'xcom_backend']
-summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbnail: './images/2022-11-25-thumbnail.png'
+title: "AWS MWAA xcom backend configuration 이슈 해결"
+description: "AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈"
+date: 2022-11-25
+update: 2022-11-25
+tags:
+  - AWS
+  - MWAA
+  - Airflow
 ---
 
 ## 문제
@@ -16,7 +21,7 @@ summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbna
 1. 이슈 재현
     - local에 mwaa 환경 구축 후 `core.xcom_backend:include.s3_xcom_backend.S3XComBackend` 적용시 클러스터 상태 확인
 
-      ![](./images//2022-11-25-1.png)
+      ![](./2022-11-25-1.png)
 
     - `AirflowConfigException: The object could not be loaded` 확인
     - MWAA에서는 Config 실패로 인한 retry 등으로 API Timeout이 날 때 까지 오랜 시간 Cluster 상태가 `Updating`일 수 있습니다.
@@ -31,7 +36,7 @@ summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbna
 3. `dags/` 폴더에 `s3_xcom_backend.py` 파일 생성 후 configuration 적용
     - `"core.xcom_backend": "s3_xcom_backend.S3XComBackend"`
 
-   ![](./images//2022-11-25-2.png)
+   ![](./2022-11-25-2.png)
 
    → **성공**
 
@@ -40,7 +45,7 @@ summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbna
 - Managed service이고 내부적으로 `Amazon ECS on Fargate`로 동작하기 때문에 airflow가 설치된 host의 shell로 접근할 수 있는 방법은 현재 존재하지 않습니다.
 - MWAA Architecture
 
-  ![](./images//2022-11-25-3.png)
+  ![](./2022-11-25-3.png)
 
 ### 3. Airflow Configuration 변경 방법
 
@@ -50,7 +55,7 @@ summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbna
         - `AirflowConfigurationOptions`
     2. WEB UI를 통한 방법
 
-  ![](./images//2022-11-25-4.png)
+  ![](./2022-11-25-4.png)
 
     3. AWS-CLI를 통한 방법
 
@@ -203,15 +208,15 @@ summary: 'AWS MWAA(Airflow) airflow.cfg core.xcom_backend 설정 이슈' thumbna
 - 진행 과정 요약
 - "webserver.expose_config": "True” 값을 먼저 설정합니다.
 
-![](./images//2022-11-25-5.png)
+![](./2022-11-25-5.png)
 
 - MWAA Web UI → Admin → Configuration에 들어갑니다.
 
-![](./images//2022-11-25-6.png)
+![](./2022-11-25-6.png)
 
 - UI에서 airflow.cfg를 확인합니다
 
-![](./images//2022-11-25-7.png)
+![](./2022-11-25-7.png)
 
 ## Summary
 
