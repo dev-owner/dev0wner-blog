@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RSS Feed of dev0wner's Engineering Blog]]></title><description><![CDATA[Data, Cloud에 집중하는 엔지니어의 블로그]]></description><link>https://dev0wner.pro</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 24 Jan 2023 14:16:00 GMT</lastBuildDate><item><title><![CDATA[AWS MWAA xcom backend configuration 이슈 해결]]></title><description><![CDATA[문제 AWS MWAA 에 custom xcom backend를 등록하기 위해  적용 시
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RSS Feed of dev0wner's Engineering Blog]]></title><description><![CDATA[Data, Cloud에 집중하는 엔지니어의 블로그]]></description><link>https://dev0wner.pro</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 24 Jan 2023 14:20:21 GMT</lastBuildDate><item><title><![CDATA[AWS MWAA xcom backend configuration 이슈 해결]]></title><description><![CDATA[문제 AWS MWAA 에 custom xcom backend를 등록하기 위해  적용 시
 클러스터 업데이트 실패 해결 1. airflow.cfg 옵션 변경 실패에 대한 디버깅 이슈 재현 local에 mwaa…]]></description><link>https://dev0wner.pro/mwaa-xcom-backend-config-issue/</link><guid isPermaLink="false">https://dev0wner.pro/mwaa-xcom-backend-config-issue/</guid><pubDate>Fri, 25 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;문제&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;AWS MWAA &lt;code class=&quot;language-text&quot;&gt;airflow.cfg&lt;/code&gt;에 custom xcom backend를 등록하기 위해 &lt;code class=&quot;language-text&quot;&gt;core.xcom_backend:include.s3_xcom_backend.S3XComBackend&lt;/code&gt; 적용 시
@@ -13,14 +13,14 @@
 &lt;li&gt;
 &lt;p&gt;local에 mwaa 환경 구축 후 &lt;code class=&quot;language-text&quot;&gt;core.xcom_backend:include.s3_xcom_backend.S3XComBackend&lt;/code&gt; 적용시 클러스터 상태 확인&lt;/p&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 11.76470588235294%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAACCAYAAABYBvyLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAYklEQVR42jWOSwoAIQxDZdyI3xkR//e/ZsYUXIS8tIFW5TERSoE2Bo/WcM7Bey8KISDGKEy/zDlFZt9aKzuyenvHtxZczlLIx+ecaK2h1ooxhuR+esycUzfvvVHOQyklOfIDkqYvwPRIONAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 1&apos; title=&apos;2022 11 25 1&apos; src=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png&apos; srcset=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/e7570/2022-11-25-1.png 170w,
-/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/f46e7/2022-11-25-1.png 340w,
-/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png 680w,
-/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/02d09/2022-11-25-1.png 1020w,
-/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/9d567/2022-11-25-1.png 1360w,
-/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png 1694w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 1&apos; title=&apos;2022 11 25 1&apos; src=&apos;/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png&apos; srcset=&apos;/static/91773868639b32eddb0544cd10f8efe6/e7570/2022-11-25-1.png 170w,
+/static/91773868639b32eddb0544cd10f8efe6/f46e7/2022-11-25-1.png 340w,
+/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png 680w,
+/static/91773868639b32eddb0544cd10f8efe6/02d09/2022-11-25-1.png 1020w,
+/static/91773868639b32eddb0544cd10f8efe6/9d567/2022-11-25-1.png 1360w,
+/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png 1694w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;/li&gt;
@@ -44,13 +44,13 @@
 &lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&quot;core.xcom_backend&quot;: &quot;s3_xcom_backend.S3XComBackend&quot;&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 14.705882352941178%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAADCAYAAACTWi8uAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAd0lEQVR42l2NSQ7EIAwE+f8zcaSQUVgOEHZ6cDKHIZbqYpe7BdEGRhJBSsLxORFTRkppIeeMXJ59fN3+EfuuoNQBYy289wjXNZ/LE/CjlIIQAoyxiDGitYZa6yxYPUawxLDAM8ZA732Bdxyktb5dO8udc3fw2/0Cy+LonauzsgUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 2&apos; title=&apos;2022 11 25 2&apos; src=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png&apos; srcset=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/e7570/2022-11-25-2.png 170w,
-/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/f46e7/2022-11-25-2.png 340w,
-/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png 680w,
-/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/02d09/2022-11-25-2.png 1020w,
-/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png 1180w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 2&apos; title=&apos;2022 11 25 2&apos; src=&apos;/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png&apos; srcset=&apos;/static/da1565b98e649d621da24c378012c31d/e7570/2022-11-25-2.png 170w,
+/static/da1565b98e649d621da24c378012c31d/f46e7/2022-11-25-2.png 340w,
+/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png 680w,
+/static/da1565b98e649d621da24c378012c31d/02d09/2022-11-25-2.png 1020w,
+/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png 1180w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;→ &lt;strong&gt;성공&lt;/strong&gt;&lt;/p&gt;
@@ -62,12 +62,12 @@
 &lt;li&gt;
 &lt;p&gt;MWAA Architecture&lt;/p&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 57.64705882352942%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAACZ0lEQVR42o1TW0/UQBTe3+lvMD7xjCQkGh/0TaPRGIwRgi9AImI0IhgQNgoE3AvZbunulr223d5me5tpP89MFx+MJjY5yWnnnDPnu7RiOS6mXoCJM8VVr4+x7ah8MLZU7voB/vcpigKV80YTtUsNumHioqGhpXfRandQv2yr0DsmeJYh5znSJEYSR+BpRsEhuECeccSdEQSL1dDKqXEIn3mU5jf3/HkvMpGq7GfvBLplzr8L8DxDFidoLr1EWDPKgbI0aFXRe30bg637sHefIC/K8aMvKxhu3oUfzWA7KVhE2/VP0KjbeL5qYZZwNURuKzdVA2VjbF3DPdvBsLqN7vE24kyow+DqAn59D24YYKxPELoBXO0bDg4MLD9swgsiFCwkOgSKvERYEZQk4RSOVv0NMgtsWLVdWO0TRMNLIlvg+tEDzGrnJQl5uU3ikZDLS+CmORclR0UmXvMQ7ce3kAYTSAo87Qc6r+6gu76I4cYibN9F66gBZzKFNTQxWFuA3TqCQxten2lwRhY4n0OO4wwiTZF6DkIq8NkMgRuCswAiZmC2D8dhCGcCEXFljYfQ3j3FSL8Ao/cwzMFYBEFOUAPHI4ZUCMRxDneSKrUtK0ZEPKYU/X6MqRMq7TlBElQrdxHkOcGz0h2kYiHmHBrPNsG+1tH1DLx4f4+OC5grO5h+OqWGEP03C8o6g7V12JsbqiknRDlBlGLcRCGHyoH65yoJYMAY97Cx/xYsS9D6eAzze4NgBqh9WIVHSl7t7aNzcFi6tSj+4tb5n3LzkhEfsjojLiTwVBqabk7kGXlMwuRK4Vw1/it+ARIjhsZ+t3OJAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 3&apos; title=&apos;2022 11 25 3&apos; src=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png&apos; srcset=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/e7570/2022-11-25-3.png 170w,
-/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/f46e7/2022-11-25-3.png 340w,
-/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png 680w,
-/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png 970w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 3&apos; title=&apos;2022 11 25 3&apos; src=&apos;/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png&apos; srcset=&apos;/static/40f9830c01782fdc7a0a6c676e49bb3c/e7570/2022-11-25-3.png 170w,
+/static/40f9830c01782fdc7a0a6c676e49bb3c/f46e7/2022-11-25-3.png 340w,
+/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png 680w,
+/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png 970w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;/li&gt;
@@ -87,12 +87,12 @@
 &lt;li&gt;WEB UI를 통한 방법&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 32.35294117647059%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAYAAADDl76dAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA1klEQVR42oWP4Q6CMAyEef/XU8AoGvCPwDYYxA0Hg7NdRI2JuuTLuqa9u0XGGGy2MY7HE+I4QZKk2B8ypOkORXFGlmU45QWUvmIYBljL2EdtYekeHkzeI+Jmnp9xKUsIKVFVNaRSEEKGN6NUA617NE2LttVPeE7rLvT7vodnwWmagqtzDjdiHEc4gvvcW9O40WFZlq/42b8EFTmUlCxQ1qhqEWrddcGMBdno12HReZ4R8SAvCqlIuEFNX5X0RUlvY2wYWoc5wTc4WEi4Lqwu7+efyCe8fwdroM/7uFSrBgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 4&apos; title=&apos;2022 11 25 4&apos; src=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png&apos; srcset=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/e7570/2022-11-25-4.png 170w,
-/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/f46e7/2022-11-25-4.png 340w,
-/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png 680w,
-/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png 785w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 4&apos; title=&apos;2022 11 25 4&apos; src=&apos;/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png&apos; srcset=&apos;/static/3da0fafcf2733f560f8cc20d16daa2c4/e7570/2022-11-25-4.png 170w,
+/static/3da0fafcf2733f560f8cc20d16daa2c4/f46e7/2022-11-25-4.png 340w,
+/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png 680w,
+/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png 785w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;ol start=&quot;3&quot;&gt;
@@ -235,36 +235,36 @@ python_callable&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;get_co
 &lt;li&gt;&quot;webserver.expose_config&quot;: &quot;True” 값을 먼저 설정합니다.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 21.176470588235293%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAYAAACOXx+WAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAk0lEQVR42o3MwQ6CMBAE0P7/p3kyeiCaCEEsUARKItDutmWsjXfY5GU2cxihlEJVVSjLJ6SUqJsG82LATCA6xloLY0z6hZ4mtKpDPwxY/yUxg13E+5xzmOcFo57SsNCjhmoV+u6dUCwRNmzeR2FfCHBxOMT8ndCnK4bLDf05wyfLQY8XXFEfk0v4mOu9hM0KeGJ8AW/gM4uRJIJSAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 5&apos; title=&apos;2022 11 25 5&apos; src=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png&apos; srcset=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/e7570/2022-11-25-5.png 170w,
-/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/f46e7/2022-11-25-5.png 340w,
-/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png 680w,
-/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/02d09/2022-11-25-5.png 1020w,
-/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png 1202w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 5&apos; title=&apos;2022 11 25 5&apos; src=&apos;/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png&apos; srcset=&apos;/static/6fd48288d918c49f49551ce87f38762f/e7570/2022-11-25-5.png 170w,
+/static/6fd48288d918c49f49551ce87f38762f/f46e7/2022-11-25-5.png 340w,
+/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png 680w,
+/static/6fd48288d918c49f49551ce87f38762f/02d09/2022-11-25-5.png 1020w,
+/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png 1202w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;MWAA Web UI → Admin → Configuration에 들어갑니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 612px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 31.176470588235293%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAYAAADDl76dAAAACXBIWXMAAAsTAAALEwEAmpwYAAABPUlEQVR42jVRy07DMBDM/38IEhIXJLhw4QIHECCkSoBCKwKlaeMmtuM6qd/D2hWWNh7v7own6+r7q8X96zP4OGLSGiFGMMZgrcVIuWEYkFKClBKc84IF7SOdg/fgVPfOI69cq7ZywlvX4DjPMMYgkqAQouAsmAnBh5N43yMg4XCcMVtDCBj1gXJAJLEQAio9k3qIxdFMokop2id4uj2LpxThnCuikYi2F+CLGs3DC1TdILY9zGoNozR8FnxaWehpwkTBWIe6rrFcLknQFZf/YSnycu8N1hc3WJxfYXF2ie72Eer6Dp7xUq9iDEQO5WBddpUKPhoHl10Vl6n0eMLeWIifDX4/PiHWLYJQCKMuc8y/XUk1YbsXhbzrJdqOE/boqXFH+T0nAo0k97CBZkpkeaAaPZxPp8vzN+t0xP8Dcy7Lfc+jU/wAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 6&apos; title=&apos;2022 11 25 6&apos; src=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; srcset=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/e7570/2022-11-25-6.png 170w,
-/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/f46e7/2022-11-25-6.png 340w,
-/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png 612w&apos; sizes=&apos;(max-width: 612px) 100vw, 612px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 6&apos; title=&apos;2022 11 25 6&apos; src=&apos;/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; srcset=&apos;/static/1de3a02c5849803d3512998d399ab815/e7570/2022-11-25-6.png 170w,
+/static/1de3a02c5849803d3512998d399ab815/f46e7/2022-11-25-6.png 340w,
+/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png 612w&apos; sizes=&apos;(max-width: 612px) 100vw, 612px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;UI에서 airflow.cfg를 확인합니다&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 103.52941176470587%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAAsTAAALEwEAmpwYAAACq0lEQVR42oVUi3LaMBD0//9c27RpYsC2LFl+ghNcwjtcd68SwzBDysyObKNb7e6dnTy9pGK6Vg67vXx8fMg0TbJer+X9/V32+72Mq1FOp5O8vb3J8XiUaT3J5XKRR79k3G5ls9/KGUUsPJ/PitPpqAQ8hOsW+w6Hg+x2O933CEmRLSTLMqmqStc0TWWxWEie51rMX1R0uz5CMgyD1HUtfd/LcrlUYu+9tG2r9qmMKjebja7/gxKymKRcu667omma6zNmSIzj+CWS1Wql6kjMa668j4RUy7XDMxLGhj1C0g+99CgeUEAiyr58fmqT2JzPa5NOev1VQ7QpaTmXmSnEwXIJNRUsehArcFB9B6qgykdIrC9lbuZiKyfOGDHodIEum/lcDO4tDnKwzMN4zViY1QqIud4isbWXzJYoqCQvrWQktVa7zdw6ZoruR7R4RlAtyaeQKck0Q992YnA6YRvYDoqoRi0jgjYQNzdk3NOHZ/wvNivJnJPnLJfUlPJaGJlD3QtUpgBtGiglecH5BDlVkuCqPKxLqFXLvnFiXC4FYJwRX8L+IhMHcirxQWEVyKLl/k4x9+kclh65lbnktpBFiW5DSQGVzJEKqcyEhrCYStQ+57TrtTlT6LBarttKqtpibEoMcSUtsmlQMAQ7LI6KYmOGAF6TMDYldLmVH7O5/ITNnxiZDIpy4Bs+Et+BGSL4jYyf8f8vjFMfDogR3JKpQgd1mYVlbM5AUOErUzFHX6vVCooJF7ofZ5DW72fxH2GDOXQWM1hqbsyvQjEVMHRmpyOEe9pkXhG3b0hUmnBUnvBWqMXZTG1zdF6LQl6gNiINb02cQR5A2HD4AMVBIWfMSe7YGC8lMwwdjq9bLF7d2g1YBozRctfDkjcK31hpQVIDlP8HH9jpztZXYM1fPVoncqi9rWEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 7&apos; title=&apos;2022 11 25 7&apos; src=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png&apos; srcset=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/e7570/2022-11-25-7.png 170w,
-/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/f46e7/2022-11-25-7.png 340w,
-/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png 680w,
-/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png 814w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 7&apos; title=&apos;2022 11 25 7&apos; src=&apos;/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png&apos; srcset=&apos;/static/0f4446c8f80891195e7f14d6a90524d8/e7570/2022-11-25-7.png 170w,
+/static/0f4446c8f80891195e7f14d6a90524d8/f46e7/2022-11-25-7.png 340w,
+/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png 680w,
+/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png 814w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;h2&gt;Summary&lt;/h2&gt;
@@ -336,14 +336,14 @@ series: &quot;gatsby-starter-hoodie 로 블로그 시작하기&quot;
 &lt;p&gt;상대경로를 이용하여 쉽게 이미지를 추가할 수 있습니다. 디렉토리를 생성하고 그 안에 &lt;code class=&quot;language-text&quot;&gt;index.md&lt;/code&gt; 를 추가하여, 글을 추가하는 방법으로 작성해야 이미지 관리가 쉽습니다.&lt;/p&gt;
 &lt;p&gt;&lt;figure class=&apos;gatsby-resp-image-figure&apos; style=&apos;margin-bottom: 16px;&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; &apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 61.1764705882353%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAMABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAIEA//EABUBAQEAAAAAAAAAAAAAAAAAAAIB/9oADAMBAAIQAxAAAAGRqVElMgn/xAAbEAACAwADAAAAAAAAAAAAAAABAgADBBEiM//aAAgBAQABBQIFeW7ETHWrzR7NYVb/xAAVEQEBAAAAAAAAAAAAAAAAAAAQQf/aAAgBAwEBPwGH/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAESIf/aAAgBAgEBPwFrCT//xAAaEAACAwEBAAAAAAAAAAAAAAAAAQIRITFR/9oACAEBAAY/AlZltHRynrTpHhWH/8QAGxABAAMAAwEAAAAAAAAAAAAAAQARMSFBUWH/2gAIAQEAAT8hHdQ+EfqHAx0YJQraMICiaLa7iwFD0n//2gAMAwEAAgADAAAAEFsf/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERIf/aAAgBAwEBPxCcKf/EABcRAQADAAAAAAAAAAAAAAAAAAARIUH/2gAIAQIBAT8QgLa//8QAGhABAQADAQEAAAAAAAAAAAAAAREAITFRQf/aAAgBAQABPxA/ilHdcSToMLH7Z75lm1KhDmbPbB6O893hiaua1fuNuJra5//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;샘플 이미지 캡션&apos; title=&apos;샘플 이미지 캡션&apos; src=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg&apos; srcset=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/0b705/sample-image.jpg 170w,
-/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/31389/sample-image.jpg 340w,
-/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg 680w,
-/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/29373/sample-image.jpg 1020w,
-/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/232dc/sample-image.jpg 1360w,
-/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg 1920w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;샘플 이미지 캡션&apos; title=&apos;샘플 이미지 캡션&apos; src=&apos;/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg&apos; srcset=&apos;/static/69b244095d8c72158c9dd2d4ca59a7b1/0b705/sample-image.jpg 170w,
+/static/69b244095d8c72158c9dd2d4ca59a7b1/31389/sample-image.jpg 340w,
+/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg 680w,
+/static/69b244095d8c72158c9dd2d4ca59a7b1/29373/sample-image.jpg 1020w,
+/static/69b244095d8c72158c9dd2d4ca59a7b1/232dc/sample-image.jpg 1360w,
+/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg 1920w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;
     &lt;figcaption class=&apos;gatsby-resp-image-figcaption&apos;&gt;샘플 이미지 캡션&lt;/figcaption&gt;
@@ -354,22 +354,22 @@ series: &quot;gatsby-starter-hoodie 로 블로그 시작하기&quot;
 &lt;/blockquote&gt;
 &lt;h2&gt;4. 태그&lt;/h2&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 18.823529411764707%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAEABQDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIQAxAAAAG+AD//xAAUEAEAAAAAAAAAAAAAAAAAAAAQ/9oACAEBAAEFAn//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/AT//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAUEAEAAAAAAAAAAAAAAAAAAAAQ/9oACAEBAAY/An//xAAVEAEBAAAAAAAAAAAAAAAAAAAQEf/aAAgBAQABPyGP/9oADAMBAAIAAwAAABBzz//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8QP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8QP//EABYQAQEBAAAAAAAAAAAAAAAAAAEQMf/aAAgBAQABPxABl//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;tag example&apos; title=&apos;tag example&apos; src=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg&apos; srcset=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/0b705/tag-example.jpg 170w,
-/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/31389/tag-example.jpg 340w,
-/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg 680w,
-/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg 737w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;tag example&apos; title=&apos;tag example&apos; src=&apos;/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg&apos; srcset=&apos;/static/82ce4bec7f5360eef32a473171b181af/0b705/tag-example.jpg 170w,
+/static/82ce4bec7f5360eef32a473171b181af/31389/tag-example.jpg 340w,
+/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg 680w,
+/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg 737w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;Frontmatter 의 태그를 통해 쉽게 문서를 분류하고 검색할 수 있습니다. 여러분의 모든 태그는 &lt;code class=&quot;language-text&quot;&gt;https://siteUrl/tags&lt;/code&gt; 경로에서 확인하고, 검색할 수 있습니다.&lt;/p&gt;
 &lt;h2&gt;5. 시리즈&lt;/h2&gt;
 &lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 677px; margin-bottom: 16px;&apos;&gt;
-      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
     &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 17.058823529411764%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAADABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAdqwSD//xAAVEAEBAAAAAAAAAAAAAAAAAAABEP/aAAgBAQABBQIv/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFRABAQAAAAAAAAAAAAAAAAAAARD/2gAIAQEAAT8hF//aAAwDAQACAAMAAAAQ8A//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/ED//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/ED//xAAYEAEAAwEAAAAAAAAAAAAAAAABABAhMf/aAAgBAQABPxAk0Gcwr//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
-  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;series example&apos; title=&apos;series example&apos; src=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; srcset=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/0b705/series-example.jpg 170w,
-/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/31389/series-example.jpg 340w,
-/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg 677w&apos; sizes=&apos;(max-width: 677px) 100vw, 677px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;series example&apos; title=&apos;series example&apos; src=&apos;/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; srcset=&apos;/static/1ea4e56966cb5fb6e110d32124fd883c/0b705/series-example.jpg 170w,
+/static/1ea4e56966cb5fb6e110d32124fd883c/31389/series-example.jpg 340w,
+/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg 677w&apos; sizes=&apos;(max-width: 677px) 100vw, 677px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
   &lt;/a&gt;
     &lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;여러분이 연관된 여러개의 문서를 작성할 때 시리즈를 사용할 수 있습니다. Frontmatter 에 작성된 시리즈가 같은 문서끼리 묶여 문서 상단에 리스트로 표시됩니다. 시리즈는 일련의 순서가 있는 문서들을 작성할 때 유용하게 사용할 수 있습니다. 시리즈는 문서의 작성 날짜 순서대로 정렬됩니다.&lt;/p&gt;
