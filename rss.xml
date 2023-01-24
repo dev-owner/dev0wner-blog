@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RSS Feed of dev0wner's Engineering Blog]]></title><description><![CDATA[Data, Cloud에 집중하는 엔지니어의 블로그]]></description><link>https://dev0wner.pro</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 24 Jan 2023 14:03:50 GMT</lastBuildDate><item><title><![CDATA[AWS MWAA xcom backend configuration 이슈 해결]]></title><description><![CDATA[문제 AWS MWAA 에 custom xcom backend를 등록하기 위해  적용 시
+클러스터 업데이트 실패 해결 1. airflow.cfg 옵션 변경 실패에 대한 디버깅 이슈 재현 local에 mwaa…]]></description><link>https://dev0wner.pro/mwaa-xcom-backend-config-issue/</link><guid isPermaLink="false">https://dev0wner.pro/mwaa-xcom-backend-config-issue/</guid><pubDate>Fri, 25 Nov 2022 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;문제&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;AWS MWAA &lt;code class=&quot;language-text&quot;&gt;airflow.cfg&lt;/code&gt;에 custom xcom backend를 등록하기 위해 &lt;code class=&quot;language-text&quot;&gt;core.xcom_backend:include.s3_xcom_backend.S3XComBackend&lt;/code&gt; 적용 시
+클러스터 업데이트 실패&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;해결&lt;/h2&gt;
+&lt;h3&gt;1. airflow.cfg 옵션 변경 실패에 대한 디버깅&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;이슈 재현&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;local에 mwaa 환경 구축 후 &lt;code class=&quot;language-text&quot;&gt;core.xcom_backend:include.s3_xcom_backend.S3XComBackend&lt;/code&gt; 적용시 클러스터 상태 확인&lt;/p&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 11.76470588235294%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAACCAYAAABYBvyLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAYklEQVR42jWOSwoAIQxDZdyI3xkR//e/ZsYUXIS8tIFW5TERSoE2Bo/WcM7Bey8KISDGKEy/zDlFZt9aKzuyenvHtxZczlLIx+ecaK2h1ooxhuR+esycUzfvvVHOQyklOfIDkqYvwPRIONAAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 1&apos; title=&apos;2022 11 25 1&apos; src=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png&apos; srcset=&apos;/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/e7570/2022-11-25-1.png 170w,
+/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/f46e7/2022-11-25-1.png 340w,
+/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/ca1dc/2022-11-25-1.png 680w,
+/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/02d09/2022-11-25-1.png 1020w,
+/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/9d567/2022-11-25-1.png 1360w,
+/dev0wner-blog/static/91773868639b32eddb0544cd10f8efe6/cc39a/2022-11-25-1.png 1694w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;AirflowConfigException: The object could not be loaded&lt;/code&gt; 확인&lt;/li&gt;
+&lt;li&gt;MWAA에서는 Config 실패로 인한 retry 등으로 API Timeout이 날 때 까지 오랜 시간 Cluster 상태가 &lt;code class=&quot;language-text&quot;&gt;Updating&lt;/code&gt;일 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;기본 값 적용시 내용 확인&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;&quot;core.xcom_backend&quot;: &quot;airflow.models.xcom.BaseXCom&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;→ 성공&lt;/p&gt;
+&lt;p&gt;→ Value값에 참조할 수 없는 값이 들어가면 실패하는 것을 유추할 수 있습니다&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;dags/&lt;/code&gt; 폴더에 &lt;code class=&quot;language-text&quot;&gt;s3_xcom_backend.py&lt;/code&gt; 파일 생성 후 configuration 적용&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;&quot;core.xcom_backend&quot;: &quot;s3_xcom_backend.S3XComBackend&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 14.705882352941178%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAADCAYAAACTWi8uAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAd0lEQVR42l2NSQ7EIAwE+f8zcaSQUVgOEHZ6cDKHIZbqYpe7BdEGRhJBSsLxORFTRkppIeeMXJ59fN3+EfuuoNQBYy289wjXNZ/LE/CjlIIQAoyxiDGitYZa6yxYPUawxLDAM8ZA732Bdxyktb5dO8udc3fw2/0Cy+LonauzsgUAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 2&apos; title=&apos;2022 11 25 2&apos; src=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png&apos; srcset=&apos;/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/e7570/2022-11-25-2.png 170w,
+/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/f46e7/2022-11-25-2.png 340w,
+/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/ca1dc/2022-11-25-2.png 680w,
+/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/02d09/2022-11-25-2.png 1020w,
+/dev0wner-blog/static/da1565b98e649d621da24c378012c31d/2561a/2022-11-25-2.png 1180w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;→ &lt;strong&gt;성공&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;2. MWAA Managed Node 접근 방법이 있을까?&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Managed service이고 내부적으로 &lt;code class=&quot;language-text&quot;&gt;Amazon ECS on Fargate&lt;/code&gt;로 동작하기 때문에 airflow가 설치된 host의 shell로 접근할 수 있는 방법은 현재 존재하지 않습니다.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MWAA Architecture&lt;/p&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 57.64705882352942%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAACZ0lEQVR42o1TW0/UQBTe3+lvMD7xjCQkGh/0TaPRGIwRgi9AImI0IhgQNgoE3AvZbunulr223d5me5tpP89MFx+MJjY5yWnnnDPnu7RiOS6mXoCJM8VVr4+x7ah8MLZU7voB/vcpigKV80YTtUsNumHioqGhpXfRandQv2yr0DsmeJYh5znSJEYSR+BpRsEhuECeccSdEQSL1dDKqXEIn3mU5jf3/HkvMpGq7GfvBLplzr8L8DxDFidoLr1EWDPKgbI0aFXRe30bg637sHefIC/K8aMvKxhu3oUfzWA7KVhE2/VP0KjbeL5qYZZwNURuKzdVA2VjbF3DPdvBsLqN7vE24kyow+DqAn59D24YYKxPELoBXO0bDg4MLD9swgsiFCwkOgSKvERYEZQk4RSOVv0NMgtsWLVdWO0TRMNLIlvg+tEDzGrnJQl5uU3ikZDLS+CmORclR0UmXvMQ7ce3kAYTSAo87Qc6r+6gu76I4cYibN9F66gBZzKFNTQxWFuA3TqCQxten2lwRhY4n0OO4wwiTZF6DkIq8NkMgRuCswAiZmC2D8dhCGcCEXFljYfQ3j3FSL8Ao/cwzMFYBEFOUAPHI4ZUCMRxDneSKrUtK0ZEPKYU/X6MqRMq7TlBElQrdxHkOcGz0h2kYiHmHBrPNsG+1tH1DLx4f4+OC5grO5h+OqWGEP03C8o6g7V12JsbqiknRDlBlGLcRCGHyoH65yoJYMAY97Cx/xYsS9D6eAzze4NgBqh9WIVHSl7t7aNzcFi6tSj+4tb5n3LzkhEfsjojLiTwVBqabk7kGXlMwuRK4Vw1/it+ARIjhsZ+t3OJAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 3&apos; title=&apos;2022 11 25 3&apos; src=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png&apos; srcset=&apos;/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/e7570/2022-11-25-3.png 170w,
+/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/f46e7/2022-11-25-3.png 340w,
+/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/ca1dc/2022-11-25-3.png 680w,
+/dev0wner-blog/static/40f9830c01782fdc7a0a6c676e49bb3c/adb12/2022-11-25-3.png 970w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;3. Airflow Configuration 변경 방법&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;현재 MWAA에서는 airflow.cfg를 &lt;strong&gt;직접적&lt;/strong&gt;으로 변경할 수 있는 방법을 제공하지 않습니다.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;가능한 방법은 아래 3가지 입니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;CFN&lt;/code&gt;이나 &lt;code class=&quot;language-text&quot;&gt;CDK&lt;/code&gt;등 &lt;code class=&quot;language-text&quot;&gt;IaC&lt;/code&gt;를 사용하여 생성하거나 업데이트 할 때 옵션 반영&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;AirflowConfigurationOptions&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;WEB UI를 통한 방법&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 32.35294117647059%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAYAAADDl76dAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA1klEQVR42oWP4Q6CMAyEef/XU8AoGvCPwDYYxA0Hg7NdRI2JuuTLuqa9u0XGGGy2MY7HE+I4QZKk2B8ypOkORXFGlmU45QWUvmIYBljL2EdtYekeHkzeI+Jmnp9xKUsIKVFVNaRSEEKGN6NUA617NE2LttVPeE7rLvT7vodnwWmagqtzDjdiHEc4gvvcW9O40WFZlq/42b8EFTmUlCxQ1qhqEWrddcGMBdno12HReZ4R8SAvCqlIuEFNX5X0RUlvY2wYWoc5wTc4WEi4Lqwu7+efyCe8fwdroM/7uFSrBgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 4&apos; title=&apos;2022 11 25 4&apos; src=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png&apos; srcset=&apos;/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/e7570/2022-11-25-4.png 170w,
+/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/f46e7/2022-11-25-4.png 340w,
+/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/ca1dc/2022-11-25-4.png 680w,
+/dev0wner-blog/static/3da0fafcf2733f560f8cc20d16daa2c4/18baa/2022-11-25-4.png 785w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;AWS-CLI를 통한 방법&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# update configuration&lt;/span&gt;
+aws mwaa update-environment &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;--name&lt;/span&gt; xcom_backend_test &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+--airflow-configuration-options &lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&quot;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;scheduler.dag_dir_list_interval&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;: &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;5&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;,
+  &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;scheduler.min_file_process_interval&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;: &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;5&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;,
+  &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;webserver.expose_config&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;: &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;True&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;&quot;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&quot;&lt;/span&gt;&quot;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# check configuration&lt;/span&gt;
+aws mwaa get-environment &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;token parameter variable&quot;&gt;--name&lt;/span&gt; xcom_backend_test &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;
+jq &lt;span class=&quot;token parameter variable&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;.Environment.AirflowConfigurationOptions&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;4. AWS-MWAA-LOCAL-RUNNER&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MWAA 환경에 직접적인 접근은 어렵지만, &lt;a href=&quot;https://github.com/aws/aws-mwaa-local-runner&quot;&gt;aws-mwaa-local-runner&lt;/a&gt;를 통해 local에 MWAA를
+mocking하여 테스트를 할 수 있습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;. /aws-mwaa-local-runner/docker/config/airflow.cfg 변경
+&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;. ./mwaa-local-env build-image
+&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;. ./mwaa-local-env start
+&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;. airflow.cfg 반영 확인&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;5. 현재 MWAA에 적용된 airflow.cfg 값 및 환경변수 확인 방법&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;여기에는 몇가지 방법이 있을 수 있습니다.&lt;/li&gt;
+&lt;li&gt;환경변수에서 확인&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; __future__ &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; annotations
+
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; logging
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; os
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; datetime &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; timedelta
+
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; DAG
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;operators&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;python &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; PythonOperator
+
+logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; logging&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getLogger&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;__name__&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; DAG&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;get_env_var&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+default_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;depends_on_past&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retries&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retry_delay&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; timedelta&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;minutes&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  description&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;check mwaa configuration&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  start_date&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2022&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;26&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  catchup&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; dag&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;print_env_vars&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  keys &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;os&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;environ&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; k&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; v &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; keys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;items&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&apos;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;k&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;: &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;v&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+get_env_vars_operator &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; PythonOperator&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+task_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;get_env_vars_task&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+python_callable&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;print_env_vars
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;airflow.cfg 파일에서 확인&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; __future__ &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; annotations
+
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; logging
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; os
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; datetime &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; timedelta
+
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; DAG
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;operators&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;python &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; PythonOperator
+
+logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; logging&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getLogger&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;__name__&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; DAG&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;get_airflow_cfg_file&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+default_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;depends_on_past&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retries&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retry_delay&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; timedelta&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;minutes&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  description&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;check mwaa configuration&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  start_date&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2022&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;26&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  catchup&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; dag&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;print_airflow_cfg&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;os&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getenv&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;AIRFLOW_HOME&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;/airflow.cfg&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;r&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; airflow_cfg&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  file_contents &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; airflow_cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;read&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&apos;\n&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;file_contents&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+get_airflow_cfg_operator &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; PythonOperator&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+task_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;get_airflow_cfg_task&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+python_callable&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;print_airflow_cfg
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;airflow.configuration.conf 확인&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; __future__ &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; annotations
+
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; logging
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; datetime &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; timedelta
+
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; DAG
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;configuration &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; conf
+&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; airflow&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;operators&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;python &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; PythonOperator
+
+logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; logging&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getLogger&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;__name__&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; DAG&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;get_airflow_cfg&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+default_args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;depends_on_past&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retries&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token string&quot;&gt;&apos;retry_delay&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; timedelta&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;minutes&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  description&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;check mwaa configuration&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  start_date&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2022&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;26&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  catchup&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; dag&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;get_conf_vars&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  logging&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;info&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;AIRFLOW__CORE__XCOM_BACKEND: &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;conf&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;section&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;CORE&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; key&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;XCOM_BACKEND&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+get_conf_vars_operator &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; PythonOperator&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+task_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;get_conf_vars_task&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+python_callable&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;get_conf_vars
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;MWAA Web UI에서 확인&lt;/li&gt;
+&lt;li&gt;진행 과정 요약&lt;/li&gt;
+&lt;li&gt;&quot;webserver.expose_config&quot;: &quot;True” 값을 먼저 설정합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 21.176470588235293%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAYAAACOXx+WAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAk0lEQVR42o3MwQ6CMBAE0P7/p3kyeiCaCEEsUARKItDutmWsjXfY5GU2cxihlEJVVSjLJ6SUqJsG82LATCA6xloLY0z6hZ4mtKpDPwxY/yUxg13E+5xzmOcFo57SsNCjhmoV+u6dUCwRNmzeR2FfCHBxOMT8ndCnK4bLDf05wyfLQY8XXFEfk0v4mOu9hM0KeGJ8AW/gM4uRJIJSAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 5&apos; title=&apos;2022 11 25 5&apos; src=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png&apos; srcset=&apos;/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/e7570/2022-11-25-5.png 170w,
+/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/f46e7/2022-11-25-5.png 340w,
+/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/ca1dc/2022-11-25-5.png 680w,
+/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/02d09/2022-11-25-5.png 1020w,
+/dev0wner-blog/static/6fd48288d918c49f49551ce87f38762f/98b00/2022-11-25-5.png 1202w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MWAA Web UI → Admin → Configuration에 들어갑니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 612px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 31.176470588235293%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAYAAADDl76dAAAACXBIWXMAAAsTAAALEwEAmpwYAAABPUlEQVR42jVRy07DMBDM/38IEhIXJLhw4QIHECCkSoBCKwKlaeMmtuM6qd/D2hWWNh7v7own6+r7q8X96zP4OGLSGiFGMMZgrcVIuWEYkFKClBKc84IF7SOdg/fgVPfOI69cq7ZywlvX4DjPMMYgkqAQouAsmAnBh5N43yMg4XCcMVtDCBj1gXJAJLEQAio9k3qIxdFMokop2id4uj2LpxThnCuikYi2F+CLGs3DC1TdILY9zGoNozR8FnxaWehpwkTBWIe6rrFcLknQFZf/YSnycu8N1hc3WJxfYXF2ie72Eer6Dp7xUq9iDEQO5WBddpUKPhoHl10Vl6n0eMLeWIifDX4/PiHWLYJQCKMuc8y/XUk1YbsXhbzrJdqOE/boqXFH+T0nAo0k97CBZkpkeaAaPZxPp8vzN+t0xP8Dcy7Lfc+jU/wAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 6&apos; title=&apos;2022 11 25 6&apos; src=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png&apos; srcset=&apos;/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/e7570/2022-11-25-6.png 170w,
+/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/f46e7/2022-11-25-6.png 340w,
+/dev0wner-blog/static/1de3a02c5849803d3512998d399ab815/dbf98/2022-11-25-6.png 612w&apos; sizes=&apos;(max-width: 612px) 100vw, 612px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;UI에서 airflow.cfg를 확인합니다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 103.52941176470587%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAAsTAAALEwEAmpwYAAACq0lEQVR42oVUi3LaMBD0//9c27RpYsC2LFl+ghNcwjtcd68SwzBDysyObKNb7e6dnTy9pGK6Vg67vXx8fMg0TbJer+X9/V32+72Mq1FOp5O8vb3J8XiUaT3J5XKRR79k3G5ls9/KGUUsPJ/PitPpqAQ8hOsW+w6Hg+x2O933CEmRLSTLMqmqStc0TWWxWEie51rMX1R0uz5CMgyD1HUtfd/LcrlUYu+9tG2r9qmMKjebja7/gxKymKRcu667omma6zNmSIzj+CWS1Wql6kjMa668j4RUy7XDMxLGhj1C0g+99CgeUEAiyr58fmqT2JzPa5NOev1VQ7QpaTmXmSnEwXIJNRUsehArcFB9B6qgykdIrC9lbuZiKyfOGDHodIEum/lcDO4tDnKwzMN4zViY1QqIud4isbWXzJYoqCQvrWQktVa7zdw6ZoruR7R4RlAtyaeQKck0Q992YnA6YRvYDoqoRi0jgjYQNzdk3NOHZ/wvNivJnJPnLJfUlPJaGJlD3QtUpgBtGiglecH5BDlVkuCqPKxLqFXLvnFiXC4FYJwRX8L+IhMHcirxQWEVyKLl/k4x9+kclh65lbnktpBFiW5DSQGVzJEKqcyEhrCYStQ+57TrtTlT6LBarttKqtpibEoMcSUtsmlQMAQ7LI6KYmOGAF6TMDYldLmVH7O5/ITNnxiZDIpy4Bs+Et+BGSL4jYyf8f8vjFMfDogR3JKpQgd1mYVlbM5AUOErUzFHX6vVCooJF7ofZ5DW72fxH2GDOXQWM1hqbsyvQjEVMHRmpyOEe9pkXhG3b0hUmnBUnvBWqMXZTG1zdF6LQl6gNiINb02cQR5A2HD4AMVBIWfMSe7YGC8lMwwdjq9bLF7d2g1YBozRctfDkjcK31hpQVIDlP8HH9jpztZXYM1fPVoncqi9rWEAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;2022 11 25 7&apos; title=&apos;2022 11 25 7&apos; src=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png&apos; srcset=&apos;/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/e7570/2022-11-25-7.png 170w,
+/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/f46e7/2022-11-25-7.png 340w,
+/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/ca1dc/2022-11-25-7.png 680w,
+/dev0wner-blog/static/0f4446c8f80891195e7f14d6a90524d8/1745e/2022-11-25-7.png 814w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MWAA의 세팅 관련 참고할만한 자료입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://catalog.workshops.aws/amazon-mwaa-for-analytics/en-US&quot;&gt;https://catalog.workshops.aws/amazon-mwaa-for-analytics/en-US&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://catalog.workshops.aws/aws-data-ingestion-pipeline/ko-KR&quot;&gt;https://catalog.workshops.aws/aws-data-ingestion-pipeline/ko-KR&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;xcom_backend의 값으로 &lt;strong&gt;참조 가능한 경로에 파일이 있어야만&lt;/strong&gt; 클러스터 정상 업데이트 가능합니다.&lt;/li&gt;
+&lt;li&gt;airflow.cfg 값을 호스트에 접근하여 직접적으로 변경할 수 있는 방법은 없습니다.&lt;/li&gt;
+&lt;li&gt;MWAA는 Managed service이기 때문에, 위에 설명드린 방법으로 우회하여 구조 등을 확인하실 수 있습니다.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;현재 MWAA에서는 만약 &lt;code class=&quot;language-text&quot;&gt;잘못된 세팅값&lt;/code&gt;으로 클러스터를 업데이트 시키면, 내부 요인에 의해 장시간 클러스터pending 상태가 될 수 있습니다. 이를 대비하는 방법은 아래와 같습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;aws-mwaa-local-runner로 미리 구성을 확인합니다.&lt;/li&gt;
+&lt;li&gt;Network or Permission 문제일 수도 있기 때문에 &lt;a href=&quot;https://github.com/awslabs/aws-support-tools/tree/master/MWAA&quot;&gt;링크와&lt;/a&gt; 같은 도구를
+이용하는 것을 추천 드립니다.&lt;/li&gt;
+&lt;li&gt;MWAA &lt;code class=&quot;language-text&quot;&gt;23년 마일스톤&lt;/code&gt;으로 클러스터 업데이트 구성 지연 이슈는 해결될 예정입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://programmaticponderings.com/2020/12/29/amazon-managed-workflows-for-apache-airflow-configuration-understanding-amazon-mwaas-configuration-options/&quot;&gt;https://programmaticponderings.com/2020/12/29/amazon-managed-workflows-for-apache-airflow-configuration-understanding-amazon-mwaas-configuration-options/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://airflow.apache.org/docs/apache-airflow/2.2.2/configurations-ref.html&quot;&gt;https://airflow.apache.org/docs/apache-airflow/2.2.2/configurations-ref.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-env-variables.html#configuring-env-variables-airflow-ref&quot;&gt;https://docs.aws.amazon.com/mwaa/latest/userguide/configuring-env-variables.html#configuring-env-variables-airflow-ref&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.astronomer.io/learn/custom-xcom-backends&quot;&gt;https://docs.astronomer.io/learn/custom-xcom-backends&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/mwaa/latest/userguide/what-is-mwaa.html&quot;&gt;https://docs.aws.amazon.com/mwaa/latest/userguide/what-is-mwaa.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[🤔 3. 작성 가이드]]></title><description><![CDATA[1. 포스트 추가하기  경로에 새로운 마크다운 파일을 생성하여 여러분의 글을 추가할 수 있습니다. 1-…]]></description><link>https://dev0wner.pro/writing-guide-kr/</link><guid isPermaLink="false">https://dev0wner.pro/writing-guide-kr/</guid><pubDate>Sat, 03 Apr 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;1. 포스트 추가하기&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;contents/post&lt;/code&gt; 경로에 새로운 마크다운 파일을 생성하여 여러분의 글을 추가할 수 있습니다.&lt;/p&gt;
+&lt;h3&gt;1-1. 포스트 파일 구조&lt;/h3&gt;
+&lt;p&gt;새로운 문서를 추가하는 방법에는 두가지가 있습니다. 첫번째는 디렉토리 없이 문서를 생성하는 방법입니다. 만약 여러분이 Javascript 에 관한 문서를 생성한다면, &lt;code class=&quot;language-text&quot;&gt;about-javascript.md&lt;/code&gt; 파일을 &lt;code class=&quot;language-text&quot;&gt;contents/posts&lt;/code&gt; 디렉토리에 추가할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;두번째 방법은 먼저 디렉토리를 생성한 뒤, 디렉토리 안에 &lt;code class=&quot;language-text&quot;&gt;index.md&lt;/code&gt; 파일을 추가하는 것 입니다. 이 방법은 문서 내에 여러 이미지 파일 등 부수적인 파일 여러개가 포함되었을 때 유용합니다.&lt;/p&gt;
+&lt;p&gt;첫번째 방법으로 생성한 파일명이나, 두번째 방법으로 생성한 디렉토리 이름은 웹사이트에서 고유의 주소를 갖습니다. &lt;code class=&quot;language-text&quot;&gt;https://siteURL/about-javascript&lt;/code&gt; 와 같이요.&lt;/p&gt;
+&lt;h3&gt;1-2. Frontmatter&lt;/h3&gt;
+&lt;p&gt;마크다운은 문서의 메타데이터인 Frontmatter 라 불리는 정보를 가지고 있습니다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;---
+title: &quot;🤔 3. 작성 가이드&quot;
+description: &quot;어떻게 글을 작성하고 추가할까요?&quot;
+date: 2021-04-03
+update: 2021-04-03
+tags:
+  - hoodie
+  - writing-guide
+series: &quot;gatsby-starter-hoodie 로 블로그 시작하기&quot;
+---&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위는 지금 여러분이 읽고 있는 문서의 Frontmatter 입니다. &lt;code class=&quot;language-text&quot;&gt;title&lt;/code&gt; 과 &lt;code class=&quot;language-text&quot;&gt;date&lt;/code&gt; 는 필수 값입니다. 띄어쓰기를 포함된 문자열을 입력할 때에는 따옴표로 감싸는 것을 추천합니다.&lt;/p&gt;
+&lt;h3&gt;1-3. 마크다운 작성하기&lt;/h3&gt;
+&lt;p&gt;만약 Frontmatter 까지 작성했다면, 여러분은 그 아래에 마크다운 문서를 작성하면 됩니다. gatsby-starter-hoodie 는 대부분의 마크다운 문법을 지원합니다. 마크다운 작성 방법을 알고 싶다면, Github 의 &lt;a href=&quot;https://guides.github.com/features/mastering-markdown/&quot;&gt;Mastering Markdown&lt;/a&gt; 문서를 참고하세요.&lt;/p&gt;
+&lt;h2&gt;2. 코드 하이라이팅 &amp;#x26; Katex&lt;/h2&gt;
+&lt;h3&gt;2-1. 코드 하이라이팅&lt;/h3&gt;
+&lt;p&gt;Prism.JS 에 기반한 코드 하이라이팅이 제공됩니다.&lt;/p&gt;
+&lt;h4&gt;예시&lt;/h4&gt;
+&lt;p&gt;Javascript&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Hello, world!&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Python&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Hello, world!&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;그 외 더 많은 언어를 제공합니다. 제공되는 언어를 확인하고 싶다면, &lt;a href=&quot;https://prismjs.com/&quot;&gt;Prism.js 웹사이트&lt;/a&gt; 를 참고하세요.&lt;/p&gt;
+&lt;h3&gt;2-2. Katex&lt;/h3&gt;
+&lt;p&gt;Katex 문법을 지원하여 복잡한 수식도 쉽게 표현할 수 있습니다.&lt;/p&gt;
+&lt;h4&gt;인라인 모드&lt;/h4&gt;
+&lt;p&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;E&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;E = m c^{2}&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.68333em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.05764em;&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mrel&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.2777777777777778em;&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:0.8141079999999999em;vertical-align:0em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;mord&quot;&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.8141079999999999em;&quot;&gt;&lt;span style=&quot;top:-3.063em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h4&gt;블럭 모드&lt;/h4&gt;
+&lt;span class=&quot;katex-display&quot;&gt;&lt;span class=&quot;katex&quot;&gt;&lt;span class=&quot;katex-mathml&quot;&gt;&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;msubsup&gt;&lt;mo&gt;∫&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;∞&lt;/mi&gt;&lt;/msubsup&gt;&lt;mi&gt;f&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&quot;application/x-tex&quot;&gt;\int_{0}^{\infty} f(x) dx&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&quot;katex-html&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;base&quot;&gt;&lt;span class=&quot;strut&quot; style=&quot;height:2.326242em;vertical-align:-0.9119499999999999em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mop&quot;&gt;&lt;span class=&quot;mop op-symbol large-op&quot; style=&quot;margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;&quot;&gt;∫&lt;/span&gt;&lt;span class=&quot;msupsub&quot;&gt;&lt;span class=&quot;vlist-t vlist-t2&quot;&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:1.414292em;&quot;&gt;&lt;span style=&quot;top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;top:-3.8129000000000004em;margin-right:0.05em;&quot;&gt;&lt;span class=&quot;pstrut&quot; style=&quot;height:2.7em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;sizing reset-size6 size3 mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;&lt;span class=&quot;mord mtight&quot;&gt;∞&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-s&quot;&gt;​&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;vlist-r&quot;&gt;&lt;span class=&quot;vlist&quot; style=&quot;height:0.9119499999999999em;&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;mspace&quot; style=&quot;margin-right:0.16666666666666666em;&quot;&gt;&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot; style=&quot;margin-right:0.10764em;&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;mopen&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mclose&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;mord mathnormal&quot;&gt;x&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;h2&gt;3. 글에 이미지 추가하기&lt;/h2&gt;
+&lt;p&gt;상대경로를 이용하여 쉽게 이미지를 추가할 수 있습니다. 디렉토리를 생성하고 그 안에 &lt;code class=&quot;language-text&quot;&gt;index.md&lt;/code&gt; 를 추가하여, 글을 추가하는 방법으로 작성해야 이미지 관리가 쉽습니다.&lt;/p&gt;
+&lt;p&gt;&lt;figure class=&apos;gatsby-resp-image-figure&apos; style=&apos;margin-bottom: 16px;&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; &apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 61.1764705882353%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAMABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAIEA//EABUBAQEAAAAAAAAAAAAAAAAAAAIB/9oADAMBAAIQAxAAAAGRqVElMgn/xAAbEAACAwADAAAAAAAAAAAAAAABAgADBBEiM//aAAgBAQABBQIFeW7ETHWrzR7NYVb/xAAVEQEBAAAAAAAAAAAAAAAAAAAQQf/aAAgBAwEBPwGH/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAESIf/aAAgBAgEBPwFrCT//xAAaEAACAwEBAAAAAAAAAAAAAAAAAQIRITFR/9oACAEBAAY/AlZltHRynrTpHhWH/8QAGxABAAMAAwEAAAAAAAAAAAAAAQARMSFBUWH/2gAIAQEAAT8hHdQ+EfqHAx0YJQraMICiaLa7iwFD0n//2gAMAwEAAgADAAAAEFsf/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERIf/aAAgBAwEBPxCcKf/EABcRAQADAAAAAAAAAAAAAAAAAAARIUH/2gAIAQIBAT8QgLa//8QAGhABAQADAQEAAAAAAAAAAAAAAREAITFRQf/aAAgBAQABPxA/ilHdcSToMLH7Z75lm1KhDmbPbB6O893hiaua1fuNuJra5//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;샘플 이미지 캡션&apos; title=&apos;샘플 이미지 캡션&apos; src=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg&apos; srcset=&apos;/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/0b705/sample-image.jpg 170w,
+/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/31389/sample-image.jpg 340w,
+/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/a22ce/sample-image.jpg 680w,
+/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/29373/sample-image.jpg 1020w,
+/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/232dc/sample-image.jpg 1360w,
+/dev0wner-blog/static/69b244095d8c72158c9dd2d4ca59a7b1/aaf92/sample-image.jpg 1920w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+    &lt;figcaption class=&apos;gatsby-resp-image-figcaption&apos;&gt;샘플 이미지 캡션&lt;/figcaption&gt;
+  &lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;이미지는 Lazy Loading 으로 로드되어, 빠른 초기 문서 로딩 속도를 확보할 수 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;⚠ 이미지의 모든 확장자는 소문자여야합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;4. 태그&lt;/h2&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 680px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 18.823529411764707%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAEABQDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAX/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIQAxAAAAG+AD//xAAUEAEAAAAAAAAAAAAAAAAAAAAQ/9oACAEBAAEFAn//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/AT//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/AT//xAAUEAEAAAAAAAAAAAAAAAAAAAAQ/9oACAEBAAY/An//xAAVEAEBAAAAAAAAAAAAAAAAAAAQEf/aAAgBAQABPyGP/9oADAMBAAIAAwAAABBzz//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8QP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8QP//EABYQAQEBAAAAAAAAAAAAAAAAAAEQMf/aAAgBAQABPxABl//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;tag example&apos; title=&apos;tag example&apos; src=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg&apos; srcset=&apos;/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/0b705/tag-example.jpg 170w,
+/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/31389/tag-example.jpg 340w,
+/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/a22ce/tag-example.jpg 680w,
+/dev0wner-blog/static/82ce4bec7f5360eef32a473171b181af/6031b/tag-example.jpg 737w&apos; sizes=&apos;(max-width: 680px) 100vw, 680px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Frontmatter 의 태그를 통해 쉽게 문서를 분류하고 검색할 수 있습니다. 여러분의 모든 태그는 &lt;code class=&quot;language-text&quot;&gt;https://siteUrl/tags&lt;/code&gt; 경로에서 확인하고, 검색할 수 있습니다.&lt;/p&gt;
+&lt;h2&gt;5. 시리즈&lt;/h2&gt;
+&lt;p&gt;&lt;span class=&apos;gatsby-resp-image-wrapper&apos; style=&apos;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 677px; margin-bottom: 16px;&apos;&gt;
+      &lt;a class=&apos;gatsby-resp-image-link&apos; href=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; style=&apos;display: block&apos; target=&apos;_blank&apos; rel=&apos;noopener&apos;&gt;
+    &lt;span class=&apos;gatsby-resp-image-background-image&apos; style=&quot;padding-bottom: 17.058823529411764%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAADABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAdqwSD//xAAVEAEBAAAAAAAAAAAAAAAAAAABEP/aAAgBAQABBQIv/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAFBABAAAAAAAAAAAAAAAAAAAAEP/aAAgBAQAGPwJ//8QAFRABAQAAAAAAAAAAAAAAAAAAARD/2gAIAQEAAT8hF//aAAwDAQACAAMAAAAQ8A//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/ED//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/ED//xAAYEAEAAwEAAAAAAAAAAAAAAAABABAhMf/aAAgBAQABPxAk0Gcwr//Z&apos;); background-size: cover; display: block;&quot;&gt;&lt;/span&gt;
+  &lt;img class=&apos;gatsby-resp-image-image&apos; alt=&apos;series example&apos; title=&apos;series example&apos; src=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg&apos; srcset=&apos;/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/0b705/series-example.jpg 170w,
+/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/31389/series-example.jpg 340w,
+/dev0wner-blog/static/1ea4e56966cb5fb6e110d32124fd883c/d1584/series-example.jpg 677w&apos; sizes=&apos;(max-width: 677px) 100vw, 677px&apos; style=&apos;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&apos; loading=&apos;lazy&apos; decoding=&apos;async&apos;&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;여러분이 연관된 여러개의 문서를 작성할 때 시리즈를 사용할 수 있습니다. Frontmatter 에 작성된 시리즈가 같은 문서끼리 묶여 문서 상단에 리스트로 표시됩니다. 시리즈는 일련의 순서가 있는 문서들을 작성할 때 유용하게 사용할 수 있습니다. 시리즈는 문서의 작성 날짜 순서대로 정렬됩니다.&lt;/p&gt;
+&lt;p&gt;현재 문서는 &lt;code class=&quot;language-text&quot;&gt;gatsby-starter-hoodie 로 블로그 시작하기&lt;/code&gt; 라는 시리즈로 설정되어 있습니다.&lt;/p&gt;</content:encoded></item></channel></rss>

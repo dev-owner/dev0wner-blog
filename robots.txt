@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://dev0wner.pro/dev0wner-blog/sitemap-index.xml
+Host: https://dev0wner.pro
