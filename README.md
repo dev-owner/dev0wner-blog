@@ -18,7 +18,7 @@ This project inspired by [hoodie](https://github.com/devHudi/gatsby-starter-hood
 ## Start dev server
 
 ```
-$ cd my-hoodie-blog
+$ nvm use 14 
 $ npm run start
 ```
 
