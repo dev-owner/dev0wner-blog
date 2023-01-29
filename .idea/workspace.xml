@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad427e2d-be5a-42bd-b2f3-f96be1188e03" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contents/posts/aws-kafka-on-eks-vs-msk/2022-11-20-[AWS EKS] AWS EKS on Kafka vs MSK.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/aws-kafka-on-eks-vs-msk/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contents/posts/mwaa-xcom-backend-config-issue/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/mwaa-xcom-backend-config-issue/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference/2022-11-10-programmers-data-engineering-conference.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-socar-data-meet-up.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +61,7 @@
       <updated>1674565203277</updated>
       <workItem from="1674565204457" duration="6752000" />
       <workItem from="1674993137705" duration="107000" />
-      <workItem from="1674993285345" duration="1296000" />
+      <workItem from="1674993285345" duration="1425000" />
     </task>
     <servers />
   </component>

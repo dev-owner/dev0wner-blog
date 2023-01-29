@@ -17,9 +17,14 @@ This project inspired by [hoodie](https://github.com/devHudi/gatsby-starter-hood
 
 ## Start dev server
 
-```
+```shell
 $ nvm use 14
 $ brew install vips 
 $ npm run start
 ```
 
+## Deploy 
+
+```shell
+$ npm run deploy-gh
+```
