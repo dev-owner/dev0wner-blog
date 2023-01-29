@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad427e2d-be5a-42bd-b2f3-f96be1188e03" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/contents/posts/apache-arrow-dive-deep/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/daily-life/2023-01-29-1.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/daily-life/2023-01-29.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -38,6 +41,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -61,7 +65,7 @@
       <updated>1674565203277</updated>
       <workItem from="1674565204457" duration="6752000" />
       <workItem from="1674993137705" duration="107000" />
-      <workItem from="1674993285345" duration="1425000" />
+      <workItem from="1674993285345" duration="6856000" />
     </task>
     <servers />
   </component>

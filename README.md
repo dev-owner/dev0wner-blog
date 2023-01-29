@@ -28,3 +28,7 @@ $ npm run start
 ```shell
 $ npm run deploy-gh
 ```
+
+## TODO
+1. 대문 글씨체 바꾸기 -> 좀더 심플하게 볼드체 없애고
+2. link mouse hover color 변경
