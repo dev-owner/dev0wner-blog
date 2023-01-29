@@ -8,6 +8,16 @@ tags:
   - MWAA
   - Airflow
 ---
+  
+---
+title: ""
+description: "2022년 프로그래머스에서 주최한 실리콘밸리에서 날아온 데이터 엔지니어링 강의 컨퍼런스 후기"
+date: 2022-11-10
+update: 2022-11-10
+tags:
+- Data Engineering
+- Programmers
+---
 
 ## 문제
 
