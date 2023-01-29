@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ad427e2d-be5a-42bd-b2f3-f96be1188e03" name="Changes" comment="" />
+    <list default="true" id="ad427e2d-be5a-42bd-b2f3-f96be1188e03" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/2022-10-27-socar-data-meet-up.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/writing-guide-kr/index.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/writing-guide-kr/sample-image.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/writing-guide-kr/series-example.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/writing-guide-kr/tag-example.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gatsby-config.js" beforeDir="false" afterPath="$PROJECT_DIR$/gatsby-config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,16 +23,28 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="2Km1z9we20fzcIQsvf7VaOVdCdy" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/contents/posts/mwaa-xcom-backend-config-issue" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/contents/posts/socar-data-meetup" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -27,6 +52,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/contents/posts/socar-data-meetup" />
       <recent name="$PROJECT_DIR$/contents/posts/mwaa-xcom-backend-config-issue" />
       <recent name="$PROJECT_DIR$/static" />
     </key>
@@ -42,11 +68,27 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1674565203277</updated>
-      <workItem from="1674565204457" duration="4524000" />
+      <workItem from="1674565204457" duration="6752000" />
+      <workItem from="1674993137705" duration="107000" />
+      <workItem from="1674993285345" duration="344000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
