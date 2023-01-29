@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url> <loc>https://dev0wner.pro/writing-guide-kr/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dev0wner.pro/socar-data-meetup/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dev0wner.pro/programmers-data-engineering-conference/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://dev0wner.pro/aws-kafka-on-eks-vs-msk/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dev0wner.pro/mwaa-xcom-backend-config-issue/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://dev0wner.pro/series/gatsby-starter-hoodie-로-블로그-시작하기</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dev0wner.pro/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dev0wner.pro/search/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://dev0wner.pro/series/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
