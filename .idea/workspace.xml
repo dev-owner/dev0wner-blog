@@ -2,12 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad427e2d-be5a-42bd-b2f3-f96be1188e03" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/apache-arrow-logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/arrow-abstract-structure.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/arrow-columnar-data-format.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/SIMD.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/flatbuffers.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/serialization.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-2/index.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-2/pyararow.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contents/posts/apache-arrow-dive-deep/index.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/apache-arrow-logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/apache-arrow-logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/arrow-abstract-structure.png" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/arrow-abstract-structure.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/arrow-columnar-data-format.png" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow-1/arrow-columnar-data-format.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/2023-study-apache-arrow/index.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/aws-kafka-on-eks-vs-msk/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/aws-kafka-on-eks-vs-msk/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contents/posts/socar-data-meetup/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/contents/posts/socar-data-meetup/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +46,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/contents/posts" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -47,6 +55,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/contents/posts" />
       <recent name="$PROJECT_DIR$/contents/posts/programmers-data-engineering-conference" />
       <recent name="$PROJECT_DIR$/contents/posts/socar-data-meetup" />
       <recent name="$PROJECT_DIR$/contents/posts/mwaa-xcom-backend-config-issue" />
@@ -68,7 +77,8 @@
       <workItem from="1674993137705" duration="107000" />
       <workItem from="1674993285345" duration="7018000" />
       <workItem from="1675059148737" duration="616000" />
-      <workItem from="1675260381039" duration="2310000" />
+      <workItem from="1675260381039" duration="3198000" />
+      <workItem from="1675332913439" duration="4656000" />
     </task>
     <servers />
   </component>

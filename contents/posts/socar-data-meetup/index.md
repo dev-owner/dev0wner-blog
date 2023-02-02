@@ -10,7 +10,7 @@ tags:
 ---
 
 
-# 2022 Socar Data Meet-Up
+## 2022 Socar Data Meet-Up
 
 어느날, 링크드인 피드를 둘러보던 중 관심이 가는 [글](https://www.linkedin.com/feed/update/urn:li:activity:6986550988979539968/?updateEntityUrn=urn%3Ali%3Afs_feedUpdate%3A%28V2%2Curn%3Ali%3Aactivity%3A6986550988979539968%29)을 보았습니다. 바로 2022 쏘카 데이터 밋업인데요, 이전에 [데이터 엔지니어링 컨퍼런스](https://dev-owner.github.io/blog/review-programmers-data-engineering-conference)를 다녀온 후로 이런 오프라인 밋업에 대한 이미지가 좋아져서 바로 등록 신청 했습니다.
 
