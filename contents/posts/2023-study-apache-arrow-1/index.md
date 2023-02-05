@@ -47,7 +47,7 @@ series: "Apache Arrow 찍먹하기"
 
 &nbsp;&nbsp; Apache Arrow를 이용하면 아래와 같은 성능 이점을 가져갈 수 있다고 합니다.
 
-- Parallesim
+- Parallelism
 - Pipelining
 - Focus on CPU Efficiency
 - Zero Copy Data Sharing
@@ -77,7 +77,5 @@ series: "Apache Arrow 찍먹하기"
 
 &nbsp;&nbsp; Google에서 개발한 FlatBuffers 공식 사이트 첫줄을 보면 다음과 같이 소개되어 있습니다. `FlatBuffers is an efficient cross platform serialization library for C++, C#, C, Go, Java, Kotlin, JavaScript, Lobster, Lua, TypeScript, PHP, Python, Rust and Swift.` 즉, 직렬화 라이브러리인데 여러 언어에서 사용할 수 있는 효율적인 크로스 플랫폼 라이브러리입니다. Google의 Protobuf와 유사하지만, Object 접근 전에 역직렬화를 안해도 되어 protobuf 보다 성능이 뛰어나다고 합니다. (하지만 반대급부로 코드 생성량이 더 많습니다)
 
-
 ## Apache Arrow 1편 정리
-&nbsp;&nbsp; 지금까지 성능 관련해서 간략하게 알아보았습니다. 다음 포스트에서는 Apache Arrow 내부 구현을 보면서 코드를 한번 살펴보고 위에서 말한 내용들이 어떻게 구현되어 있는지 한번 살펴보겠습니다. 
-
+&nbsp;&nbsp; 지금까지 Apache Arrow가 무엇인지, 어떠한 이점을 가지고 있는지 살펴 보았는데, 내용이 길어져서 다음편에서도 성능 이점 관련하여 내용을 작성해 보겠습니다.
