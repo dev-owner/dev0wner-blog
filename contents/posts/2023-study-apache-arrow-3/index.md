@@ -1,5 +1,5 @@
 ---
-title: "2023 부담있는 스터디 - Apache Arrow 코드 파헤치기 #3"
+title: "2023 부담있는 스터디 - Apache Arrow 코드 파헤치기"
 description: "갑자기 궁금해서 공부해본 apache arrow 이야기 세번째 - 내부구현"
 date: 2023-02-06
 update: 2023-02-06

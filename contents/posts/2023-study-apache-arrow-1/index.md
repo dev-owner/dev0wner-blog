@@ -1,5 +1,5 @@
 ---
-title: "2023 부담있는 스터디 - Apache Arrow란 무엇인가? #1"
+title: "2023 부담있는 스터디 - Apache Arrow란 무엇인가?"
 description: "갑자기 궁금해서 공부해본 apache arrow 이야기 첫번째"
 date: 2023-01-29
 update: 2023-01-29
